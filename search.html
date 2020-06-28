@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Code Viewer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="search.js"></script>
+    <link rel="shortcut icon" type="image/jpg" href="/favicon.ico" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body class="" style='background-color:dodgerblue; ' onload="startPopulate();">
+    <div id="mySidenav" class="sidenav">
+        <!-- This is the search bar -->
+        <div class="input-group mb-2 form-sm  pl-0">
+            <input class="form-control my-0 py-1 bg-outline-primary" id="searchbar" type="text" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <span class="input-group-text bg-primary" onclick="search()"><i class="fas fa-search text-grey"
+                  aria-hidden="true" o> > </i></span>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <!-- This is the sidebar -->
+
+        <div class="accordion" id="accordionExample">
+            <div class="card " style="width: 300px;">
+                <div class="card-header p-1" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Topic
+                  </button>
+                    </h5>
+                </div>
+
+                <div id="collapseOne" class=" " aria-labelledby="headingOne" aria-expanded="true" data-parent="#accordionExample">
+                    <div class="text-info">What Categories to search in :
+                        <div class="btn btn-danger p-1 m-0" onclick="toggleAll()">Click All </div>
+                    </div>
+                    <div class="card-body text-info" id="mainSearch">
+
+                        <button class="btn  btn-outline-primary p-1 m-1" onclick="toggleButton(this)">Headline </button>
+                        <button class="btn  btn-outline-primary p-1 m-1" onclick="toggleButton(this)">Keywords </button>
+                        <button class="btn  btn-outline-primary p-1 m-1" onclick="toggleButton(this)">Languages </button>
+                        <button class="btn  btn-outline-primary p-1 m-1" onclick="toggleButton(this)">Code Examples </button>
+                        <button class="btn  btn-outline-primary p-1 m-1" onclick="toggleButton(this)">Code Files </button>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="width: 300px;">
+                <div class="card-header p-1" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Keywords
+                  </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="text-info">What Keywords to limit to</div>
+                    <div class="card-body" id="keywords1">
+
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="width: 300px;">
+                <div class="card-header p-1" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Language
+                  </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                    <div class="text-info">What Categories to limit to</div>
+                    <div class="card-body" id="languages1">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <!-- THis is the main container for displaying -->
+
+    <div id="main" style='background-color:dodgerblue; '>
+        <div class="bg-light rounded text-center m-0 p-1">
+            <h1> Code Search</h1>
+        </div>
+        <div>
+            Main Display
+
+
+        </div>
+
+
+
+
+
+    </div>
+
+    <script>
+        function search() {
+            text1 = document.getElementById("searchbar").value;
+            if (text1 == "") {
+                alert("Search bar empty");
+            } else {
+
+            }
+        }
+
+        function toggleAll() {
+            Buttons1 = document.querySelectorAll('#collapseOne > div.card-body.text-info > button');
+            Buttons1.forEach(element => {
+
+                element.classList.remove('btn-outline-primary');
+                element.classList.add('btn-primary');
+
+            });
+        }
+
+        function toggleButton(buttonElement) { /* Toggles the nav buttons to toggle fill in when clicked  */
+            if (buttonElement.classList.contains('btn-outline-primary')) {
+                buttonElement.classList.remove('btn-outline-primary');
+                buttonElement.classList.add('btn-primary');
+            } else {
+                buttonElement.classList.remove('btn-primary');
+                buttonElement.classList.add('btn-outline-primary');
+            }
+        }
+    </script>
+</body>
+
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+    
+    .sidenav {
+        height: 100%;
+        width: 350;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 30px;
+    }
+    
+    .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
+    
+    .sidenav a:hover {
+        color: #f1f1f1;
+    }
+    
+    #main {
+        transition: margin-left .5s;
+        padding: 16px;
+        margin-left: 300px;
+    }
+</style>
+
+
+</html>

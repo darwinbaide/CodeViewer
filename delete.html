@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Code Viewer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="work.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body onbeforeunload="unloadPage();" class="" style='background-color:dodgerblue;' onload="start();load();">
+    <div id="mySidenav" class="sidenav">
+        <h3 class="text-center">Files</h3>
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    </div>
+
+    <div class="bg-info text-center">
+        <div class="btn-group  btn-secondary text-center">
+            <button class="btn btn-outline-dark btn-info"><span  onclick="openNav()" class="">&#9776; Website</span></button>
+            <button type="button" class="btn btn-info btn-outline-dark" id="loadbtn" onclick="loadBTN();"> Load Page </button>
+            <button type="button" class="btn btn-info btn-outline-dark" id="directorybtn" onclick="directoryBTN();"> Back to Directory </button>
+            <button type="button" class="btn btn-info btn-outline-dark" id="prevbtn" onclick="previousBTN();"> <<< </button>
+            <button type="button" class="btn btn-success btn-outline-dark" id="approvebtn" onclick="approveBTN();">Approve</button>
+            <button type="button" class="btn btn-danger btn-outline-dark" id="rejectbtn" onclick="rejectBTN();">Reject</button>
+            <button type="button" class="btn btn-info btn-outline-dark" id="junkbtn" onclick="junkBTN();">Junk</button>
+            <button type="button" class="btn btn-info btn-outline-dark" id="pendingbtn" onclick="pendingBTN();">Pending</button>
+            <button type="button" class="btn btn-info btn-outline-dark" id="nextbtn" onclick="nextBTN();"> >>> </button>
+        </div>
+    </div>
+
+    <div onclick="closeNav();">
+        <div id="alertOutput">
+        </div>
+        <hr data-content="CONTENT" class="hr-text">
+        <div class="m-3 h-100 rounded bg-light" style="white-space: pre-wrap;" id="output">
+
+        </div>
+        <p>Shorcuts:</P>
+        <p>(SHIFT+C) = Approve | (SHIFT+V) = Reject | (SHIFT+B) = Pending | (SHIFT+Space) = Open SideBar | (SHIFT+X) = Show Approved </p>
+        <p>(SHIFT+Left Arrow) = Prev | (SHIFT+Right Arrow) = Next | (SHIFT+Z) = Load Page | (SHIFT+ALT) = Directory </p>
+
+    </div>
+</body>
+
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+    
+    .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: white;
+        overflow-x: scroll;
+        transition: 0.5s;
+        padding-top: 30px;
+    }
+    
+    .sidenav a {
+        text-align: left;
+        padding: 0px 4px 4px 10px;
+        text-decoration: none;
+        font-size: 12px;
+        color: white;
+        display: block;
+        transition: 0.3s;
+    }
+    
+    .sidenav a:hover {
+        color: #f1f1f1;
+    }
+    
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+    
+    @media screen and (max-height: 450px) {
+        .sidenav {
+            padding-top: 15px;
+        }
+        .sidenav a {
+            font-size: 18px;
+        }
+    }
+    
+    \n {
+        white-space: pre-wrap;
+    }
+    
+    hr.hr-text {
+        position: relative;
+        border: none;
+        height: 1px;
+        background: rgb(3, 1, 1);
+    }
+    
+    hr.hr-text::before {
+        content: attr(data-content);
+        display: inline-block;
+        background: #fff;
+        font-weight: bold;
+        font-size: 0.85rem;
+        color: #999;
+        border-radius: 30rem;
+        padding: 0.2rem 2rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "300px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+
+    function cycleApproved() {
+        if (document.getElementById("requestType").checked == true) {
+            document.getElementById("requestType").checked = false;
+        } else {
+            document.getElementById("requestType").checked = true;
+        }
+
+        var x = document.getElementById("requestType").checked;
+        if (x == true) {
+            sessionStorage.setItem('type', '2');
+        } else {
+            sessionStorage.setItem('type', '1');
+        }
+
+        unload();
+        load();
+
+
+
+
+    }
+
+    function cycleNav() {
+        if (document.getElementById("mySidenav").style.width == "250px") {
+            document.getElementById("mySidenav").style.width = "0";
+        } else {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+    }
+
+    document.onkeyup = function(e) {
+        if (e.shiftKey && e.which == 67) { // ctrl+c
+            document.getElementById("approvebtn").click();
+        } else if (e.shiftKey && e.which == 86) { // ctrl + v
+            document.getElementById("rejectbtn").click();
+            //sessionStorage.setItem('button', 'true');
+            //rejectBTN();
+        } else if (e.shiftKey && e.which == 66) { // ctrl + v
+            document.getElementById("pendingbtn").click();
+        }
+        if (e.shiftKey && e.which == 32) { // ctrol+ space
+            cycleNav();
+
+        }
+        if (e.shiftKey && e.which == 88) { // ctrl+x
+            cycleApproved();
+        }
+        if (e.shiftKey && e.which == 37) { //ctrl+LeftArrowKey
+            document.getElementById("prevbtn").click();
+        } else if (e.shiftKey && e.which == 39) { // ctrl+rightArrowKey
+            document.getElementById("nextbtn").click();
+        }
+        if (e.shiftKey && e.which == 18) { //ctrl+LeftArrowKey
+            document.getElementById("directorybtn").click();
+        } else if (e.shiftKey && e.which == 90) { // ctrl+rightArrowKey
+            document.getElementById("loadbtn").click();
+        }
+
+
+
+    };
+</script>
+
+</html>
