@@ -4,8 +4,8 @@ header("Access-Control-Allow-Origin:*");
 header('Content-Type: application/json');
 # Start of Data aquisition
 
-$version = $_POST['version'];// grabs the version to see what function to go into
-//$version="search";
+//$version = $_POST['version'];// grabs the version to see what function to go into
+$version="results";
 
 
 
@@ -19,11 +19,6 @@ if($version == "directory"){
     $arr = array('Done' => 'yes', 'errors' => "",'fileName'=>"test", 'Data' =>$htmlText);// sends back data to display 
     echo json_encode($arr);// sends the response with correct json
 }
-
-
-
-
-
 
 
 
@@ -84,9 +79,38 @@ if($version== "work"){
 
 }
 
+if($version == "results"){
+    
+    $htmlSearch="";
+    $htmlKeyword="";
+    $htmlLanguage="";
+    $html="";
+    if($htmlKeyword=="" && $htmlLanguage =="" && $htmlSearch ==""){
+    $command3='SELECT * FROM codestorage.codefiles;';
+    }else{
+        $command3='SELECT * FROM codestorage.codefiles where ( codeName  like "%ext%"  or  keywords  like "%ext%" or language  like "%ext%" or example  like "%ext%"or exampleFile  like "%ext%" ) and (language like "Python") and (keywords like "%test%")';
 
+    }
+    //grabs all the keywords in the DB to compile a list to display on the search page
+    $result = SQLSend($command3);
+    // the header html
+    $html.='<!-- Results header --> <div class="" id="resultsTab">      <div class="text-left mt-0 font-weight-bold">Results Found: '.mysqli_num_rows($result).' </div>      <div class="text-right m-0">          <button onclick="viewList()">              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">  <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>             </svg>           </button>          <button onclick="viewDetail()">               <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-view-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">                  <path fill-rule="evenodd" d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2zm0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14z"/>                </svg>          </button>          <button onclick="viewCards()">             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-collection" fill="currentColor" xmlns="http://www.w3.org/2000/svg">                 <path fill-rule="evenodd" d="M14.5 13.5h-13A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5zm-13 1A1.5 1.5 0 0 1 0 13V6a1.5 1.5 0 0 1 1.5-1.5h13A1.5 1.5 0 0 1 16 6v7a1.5 1.5 0 0 1-1.5 1.5h-13zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1z"/>                 </svg>           </button>       </div>  </div>  <!-- Start of results cards list --> <div class="cardList  ">';
+    while($row = mysqli_fetch_array($result)){
+        // the rows for the results
+
+        $html.='<div class="card ">  <div class="card-list"><b><h4 class="card-header"><a class="text-primary" onclick="openTab('.$row[0].')">'.$row[1].'</a></h4></b> </div>';
+        $html.='<div class="card-detail d-none"><b><h4 class="card-header"><a class="text-primary" onclick="openTab('.$row[0].')">'.$row[1].'</a></h4></b><div class="card-body "> <p class="card-text">'.$row[4].'</p>   </div>  </div><div class="card-card d-none">';
+        $html.='<div class="card" style="width: 100%;"> <div class="card-body"><b><h4 class="card-title"><a class="text-primary" onclick="openTab('.$row[0].')">'.$row[1].'</a></h4></b><p class="card-text">'.$row[4].'</p></div> <ul class="list-group list-group-flush"><li class="list-group-item"><b>Keywords: </b>'.$row[3].'</li><li class="list-group-item"><b>Related: </b>'.$row[5].'</li><li class="list-group-item"><b>Language: </b>'.$row[6].'</li><li class="list-group-item"><b>Version: </b>'.$row[7].'</li> </ul></div> </div> </div>';
+       
+        }
+        $html.="</div>";// the end closing bracket
+       
+            $arr = array('Done' => 'yes', 'Data' =>$html);// sends back data to display 
+    echo json_encode($arr);// sends the response with correct json
+}
 
 if($version == "search"){
+    $htmlSearch="";
     $htmlKeyword="";
     $htmlLanguage="";
         //grabs all the keywords in the DB to compile a list to display on the search page

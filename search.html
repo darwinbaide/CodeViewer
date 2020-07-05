@@ -100,57 +100,80 @@
     <!-- THis is the main container for displaying -->
 
     <div id="main" style='background-color:dodgerblue; '>
-        <div class="bg-light rounded text-center m-0 p-1">
+        <div class="bg-warning rounded text-center m-0 p-1">
             <h1> Code Search</h1>
         </div>
-        <div id="cardlist" class="bg-light rounded text-left m-0 p-1">
-            <div class="card">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
+        <div id="cardlist" class="bg-light  rounded text-left m-0 p-1">
+            <!-- Results header -->
+            <div class="" id="resultsTab">
+                <div class="text-left mt-0 font-weight-bold">Results Found: 0</div>
+                <div class="text-right m-0">
+                    <button onclick="viewList()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                      </svg>
+                    </button>
+                    <button onclick="viewDetail()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-view-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2zm0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14z"/>
+                          </svg>
+                    </button>
+                    <button onclick="viewCards()">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-collection" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M14.5 13.5h-13A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5zm-13 1A1.5 1.5 0 0 1 0 13V6a1.5 1.5 0 0 1 1.5-1.5h13A1.5 1.5 0 0 1 16 6v7a1.5 1.5 0 0 1-1.5 1.5h-13zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1z"/>
+                          </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Start of results cards list -->
+            <div class="cardList  ">
+
+
+
+                <div class="card ">
+                    <div class="card-list">
+                        <h5 class="card-header">Featured</h5>
+                    </div>
+                    <div class="card-detail d-none">
+                        <h5 class="card-header">Featured</h5>
+                        <div class="card-body ">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                    <div class="card-card d-none">
+                        <div class="card" style="width: 18rem;">
+
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Description</p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>Keywords: </b>Python</li>
+                                <li class="list-group-item"><b>Related: </b>test and stuff</li>
+                                <li class="list-group-item"><b>Language: </b>Python</li>
+                                <li class="list-group-item"><b>Version: </b>1.0</li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
             </div>
 
 
+
+
+
         </div>
 
-
-
-
-
-    </div>
-
-    <script>
-        function search() {
-            text1 = document.getElementById("searchbar").value;
-            if (text1 == "") {
-                alert("Search bar empty");
-            } else {
-
-            }
-        }
-
-        function toggleAll() {
-            Buttons1 = document.querySelectorAll('#collapseOne > div.card-body.text-info > button');
-            Buttons1.forEach(element => {
-
-                element.classList.remove('btn-outline-primary');
-                element.classList.add('btn-primary');
-
-            });
-        }
-
-        function toggleButton(buttonElement) { /* Toggles the nav buttons to toggle fill in when clicked  */
-            if (buttonElement.classList.contains('btn-outline-primary')) {
-                buttonElement.classList.remove('btn-outline-primary');
-                buttonElement.classList.add('btn-primary');
-            } else {
-                buttonElement.classList.remove('btn-primary');
-                buttonElement.classList.add('btn-outline-primary');
-            }
-        }
-    </script>
+        <script>
+        </script>
 </body>
 
 <style>

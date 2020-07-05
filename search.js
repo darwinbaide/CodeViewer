@@ -58,6 +58,37 @@ async function makeCalls(total) {
 }
 
 
+
+async function makeSearch(total) {
+    //console.log(total);
+    let responsive = await fetch("processing.php", {
+        method: 'post',
+        headers: {
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+        },
+        body: total
+    });
+    let data = await responsive.json();
+    //console.log(responsive.ok);
+    if (responsive.ok == false || responsive.status !== 200) {
+        alert("Request Failed ");
+        console.log('Network response was not ok.');
+        //makeCalls(total);
+        return;
+    }
+    if (data.Done == "yes") {
+
+        document.getElementById("cardlist").innerHTML = data.Data;
+
+
+        return;
+    } else {
+        alert("search failed");
+        return;
+    }
+}
+
+
 async function makeSQL(total) {
     let responsive = await fetch("processing.php", {
         method: 'POST',
@@ -75,6 +106,100 @@ async function makeSQL(total) {
 
     return ("Yes");
 }
+
+function search() {
+    text1 = document.getElementById("searchbar").value;
+    if (text1 == "") {
+        alert("Search bar empty");
+    } else {
+
+        var query = "version=".concat("results", "&search=", "test", "&keywords=", "test2", "&language=", "test3", "&Text=", "test4"); // This will hold the data to send
+        makeSearch(query);
+
+    }
+}
+
+function toggleAll() {
+    Buttons1 = document.querySelectorAll('#collapseOne > div.card-body.text-info > button');
+    Buttons1.forEach(element => {
+
+        element.classList.remove('btn-outline-primary');
+        element.classList.add('btn-primary');
+
+    });
+}
+
+function toggleButton(buttonElement) { /* Toggles the nav buttons to toggle fill in when clicked  */
+    if (buttonElement.classList.contains('btn-outline-primary')) {
+        buttonElement.classList.remove('btn-outline-primary');
+        buttonElement.classList.add('btn-primary');
+    } else {
+        buttonElement.classList.remove('btn-primary');
+        buttonElement.classList.add('btn-outline-primary');
+    }
+}
+
+
+function viewList() {
+    cards1 = document.querySelectorAll('.card-list');
+    cards1.forEach(element => {
+        element.classList.remove('d-none');
+    });
+    cards1 = document.querySelectorAll('.card-detail');
+    cards1.forEach(element => {
+        element.classList.add('d-none');
+    });
+    cards1 = document.querySelectorAll('.card-card');
+    cards1.forEach(element => {
+        element.classList.add('d-none');
+    });
+    cards1 = document.querySelectorAll('.cardList');
+    cards1.forEach(element => {
+        element.classList.remove('card-deck');
+    });
+}
+
+function viewDetail() {
+    cards1 = document.querySelectorAll('.card-list');
+    cards1.forEach(element => {
+        element.classList.add('d-none');
+    });
+    cards1 = document.querySelectorAll('.card-detail');
+    cards1.forEach(element => {
+        element.classList.remove('d-none');
+    });
+    cards1 = document.querySelectorAll('.card-card');
+    cards1.forEach(element => {
+        element.classList.add('d-none');
+    });
+    cards1 = document.querySelectorAll('.cardList');
+    cards1.forEach(element => {
+        element.classList.remove('card-deck');
+    });
+}
+
+function viewCards() {
+    cards1 = document.querySelectorAll('.card-list');
+    cards1.forEach(element => {
+        element.classList.add('d-none');
+    });
+    cards1 = document.querySelectorAll('.card-detail');
+    cards1.forEach(element => {
+        element.classList.add('d-none');
+    });
+    cards1 = document.querySelectorAll('.card-card');
+    cards1.forEach(element => {
+        element.classList.remove('d-none');
+    });
+    cards1 = document.querySelectorAll('.cardList');
+    cards1.forEach(element => {
+        element.classList.add('card-column');
+    });
+}
+
+
+
+
 
 function getCookie(c_name) {
     if (document.cookie.length > 0) {
