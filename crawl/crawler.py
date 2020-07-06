@@ -13,6 +13,11 @@ import urlDatabaseHistory
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
+
+""" This Script is meant to create a list of links that are found on the target site for future content extraction """
+
+
+
 orignal="https://docs.python.org/3/library"
 target="https://docs.python.org/3/library/index.html"
 
