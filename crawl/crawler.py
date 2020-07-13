@@ -18,8 +18,10 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 
 
-orignal="https://docs.python.org/3/library"
-target="https://docs.python.org/3/library/index.html"
+orignal="https://www.w3schools.com/python"
+target="https://www.w3schools.com/python/python_ref_glossary.asp"
+targetPath="/html/body/div[5]/div/div"
+
 
 def requestHTML(site):       
     try:    # this will try to just request the html of a URL
@@ -49,10 +51,18 @@ def loadMain(site1):
 def getLinks(response,site):
     #xpath=xpathFix(xpath)# quick fix for the xpath just incase
     tree = etree.HTML(response)
-    node=tree.xpath('//a/@href')
+    node=tree.xpath('//a')
     output=""
+    count=0
     for links in node:
-        siteName=links
+        #print(links)
+        
+        path1=links.getroottree().getpath(links)# this gets the xpath of the link
+        if(targetPath not in path1):# if this link does not share the same container as the target xpath
+            #print(path1)
+            continue# skip
+        
+        siteName=links.attrib['href']
         if("https" not in siteName):
             if(siteName[0]=='/'):
                 siteName=orignal+siteName
@@ -62,6 +72,9 @@ def getLinks(response,site):
             output=siteName
         else:
             output=output+"<-@->"+siteName
+        print(siteName)
+        count=count+1
+    print(count)
     return(output)
 
 
@@ -75,8 +88,10 @@ def getContent(targetTO):
 def main():
     links= getContent(target)
     for parts in links.split("<-@->"):
+        print(parts)
+
         with open("LinkOutput.txt","a")as tg:
-            tg.write(parts+"")
+            tg.write("\n"+parts)
 
 
     

@@ -21,7 +21,7 @@ def connect():
     try:
         mydb = pymysql.connect(host="127.0.0.1",
                                user="darwin",
-                               password="Db142493",
+                               password="Db12345678",
                                db="codestorage",
                                charset='utf8mb4',
                                cursorclass=pymysql.cursors.DictCursor)

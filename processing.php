@@ -173,7 +173,7 @@ function SQLSend($query){
     
     $dbhost = "127.0.0.1:3306";
     $dbuser = "darwin";
-    $dbpass = "Db142493";
+    $dbpass = "Db12345678";
     $dbname = "codestorage";
     $mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
     /* check connection */
