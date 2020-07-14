@@ -13,17 +13,18 @@ headerContent="/html/body/div[6]/div[1]/div[1]"
 descriptionPath="/html/body/div[6]/div[1]/div[1]/p[2]"
 orignal="https://docs.python.org/3/library"  # the original site to use in making absolute urls
 
-def getHeader(response,xpath,xpath2,contentPath):
+def getHeader(response,xpath1,xpath2,contentPath):
     # there are two xpaths for this site as there are two types of pages on this page and it will try and then the other if not found
     response2=urlAbsolute(response)
     tree = etree.HTML(response2)
-    node=tree.xpath(xpath)
-    
+    node=tree.xpath(xpath1)
+   
     try:
         output=etree.tostring(node[0])# will try to see if it found an element
         output=str(output)# will then try to convert that into string as thats the desired outcome
         output= remove_tags(output)# cleans up teh tags that might be in the code for the header
-        output=output[2:-1]# when converting element to string it will have element tags at start and end , so just removing those
+        output=output[2:-1].lower()# when converting element to string it will have element tags at start and end , so just removing those
+        output=output.replace("python","").replace("function","").replace("\\n","")# all the headers start with python and end with function, so removing to get just the function name
     except:    
         output=""
 
@@ -32,9 +33,9 @@ def getHeader(response,xpath,xpath2,contentPath):
     
     try:
         descriptor=etree.tostring(node2[0])# will try to see if it found an element
-        descriptor=str(output)# will then try to convert that into string as thats the desired outcome
+        descriptor=str(descriptor)# will then try to convert that into string as thats the desired outcome
         descriptor=remove_tags(descriptor)
-        descriptor=descriptor[2:-1]
+        descriptor=descriptor[2:-1].lower().replace("\\n","")# removing the new line and cast to lowercase for searching
     except:    
         descriptor=""
 
@@ -45,7 +46,7 @@ def getHeader(response,xpath,xpath2,contentPath):
     node3=tree.xpath(contentPath)
     try:
         content=etree.tostring(node3[0]) # see if found element
-        content=str(content)# convert to string
+        content=str(content)[2:-1].lower()# convert to string
     except:
         content=""
 
@@ -82,7 +83,7 @@ def mainStart():
     print("------------------------------------------------------------")
     with open("linkOutput.txt","r") as tr:
         lines=tr.readlines()# gets all the lines 
-        
+    count=0
     for line in lines:# this will go through all the links in the file and try to extract specific content from the sites
         if(line==""):
             continue
@@ -91,9 +92,9 @@ def mainStart():
         text=crawler.loadMain(line)
         headerText=getHeader(text,headerPath,descriptionPath,headerContent)
         Title=headerText.split("(++#++)")[0]
-        contentText=headerText.split("(++#++)")[1].replace("'","''")
-        descriptor=headerText.split("(++#++)")[2].replace("'","''")
-        contentText= cleanup(contentText)# this will clean up the command getting rid of anything that might break it
+        contentText=headerText.split("(++#++)")[1]
+        descriptor=headerText.split("(++#++)")[2].replace("'","")# remove any colon as used in sql insert
+        #contentText= cleanup(contentText)# this will clean up the command getting rid of anything that might break it
         
 
         print("Title: "+Title)
@@ -101,22 +102,24 @@ def mainStart():
         print("Description: "+descriptor)
         print()
         print("Content:"+(contentText))
-
-        exit()
-        continue
+        count=count+1
+        print(count)
+        """ if(count>400):
+            exit()
+        continue """
 
         
         if(len(contentText)>4000):
             name=nameMe()
-            f = open("F:\\Z-Storage\\code-viewer\\"+name+".txt", "w")
+            f = open("F:\\Z-Storage\\code-viewer\\"+name+".html", "w")
             f.write(contentText)
             f.close()
-            command="INSERT INTO `codestorage`.`codefiles`(`codeName`,`language`,`version`,`active`,`exampleFile`)VALUES('"+Title+"','Python','3.8',1,'"+name+"');"
+            command="INSERT INTO `codestorage`.`codefiles`(`codeName`,`description`,`language`,`version`,`active`,`exampleFile`)VALUES('"+Title+"','"+descriptor+"','Python','3.8',1,'"+name+"');"
 
         else:
 
-            command="INSERT INTO `codestorage`.`codefiles`(`codeName`,`language`,`version`,`active`,`example`)VALUES('"+Title+"','Python','3.8',1,'"+contentText+"');"
-        #print(command)
+            command="INSERT INTO `codestorage`.`codefiles`(`codeName`,`description`,`language`,`version`,`active`,`example`)VALUES('"+Title+"','"+descriptor+"','Python','3.8',1,'"+cleanup(contentText)+"');"
+        print(command)
         mysql1.runCommand(command)
         print('Content Extracted\n')
         

@@ -4,8 +4,8 @@ header("Access-Control-Allow-Origin:*");
 header('Content-Type: application/json');
 # Start of Data aquisition
 
-//$version = $_POST['version'];// grabs the version to see what function to go into
-$version="results";
+$version = $_POST['version'];// grabs the version to see what function to go into
+//$version="results";
 
 
 
